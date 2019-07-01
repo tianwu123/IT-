@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>九宫格</title>
+		<style>
+			button{
+				outline:none;
+			}
+			#list-box{
+				width: 360px;
+				height: 360px;
+				display: flex;
+				flex-wrap: wrap;
+				margin: 100px auto;
+			}
+			#list-box div{
+				width: 100px;
+				height: 100px;
+				background-color: orange;
+				border-radius: 12px;
+				box-sizing: border-box;
+				margin: 10px;
+			}
+			#btn-box{
+				width: 100%;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
+			#btn-box button{
+				width: 360px;
+				height: 100px;
+				margin: 20px 0;
+				border: 1px solid orange;
+			}
+			.bg-FFF{
+				background-color: #FFFFFF;
+			}
+			.bg-orange{
+				background-color: orange;
+			}
+			.font-24{
+				font-size: 24px;
+			}
+			.col-orange{
+				color: orange;
+			}
+			.col-FFF{
+				color: #FFFFFF;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="list-box"></div>
+		<div id="btn-box">
+			<button class="btn font-24 bg-FFF col-orange">开始闪</button>
+			<button class="btn font-24 bg-FFF col-orange bg-orange col-FFF">结束闪</button>
+		</div>
+	</body>
+	<script>
+		//九宫格
+		var listbox = document.getElementById('list-box');
+		for(let i = 0;i<9;i++){
+			let list = document.createElement('div');
+			listbox.appendChild(list);
+		}
+		var list = document.querySelectorAll('#list-box > div');
+		var btn = document.getElementsByClassName('btn');
+		
+		
+		//点击按钮事件
+		
+		for (let i = 0;i<btn.length;i++) {
+			btn[i].addEventListener('click',function(){
+				btn_no();
+				this.click = i;
+				addclass(this,"bg-orange");
+				addclass(this,"col-FFF");
+				if(this.click == 0) return timer();
+				if(this.click == 1) return stoptimer();
+			})
+		}
+		
+		var ti;
+		//开始闪烁，建立定时器自动变颜色
+		function timer(){
+			 ti= window.setInterval(function(){
+					Twinkle(3,list);
+			},1000);
+			console.log(ti);
+		}
+		
+		//结束闪烁清除定时器,并将九宫格变成橘黄色
+		function stoptimer(){
+			clearInterval(ti);
+			bgcol(list,'orange');
+		}
+		
+		//九宫格变颜色（多少个格子随机,那个dom组合里的元素改变颜色）
+		function Twinkle(num,domarr){
+			//将九宫格颜色全部变成橘黄色
+			bgcol(list,'orange');
+			//先创建两个数组存放颜色和dom
+			let colorArr = radomcol(num);
+			let domArr = radomdom(num,domarr);
+			
+			//给格子赋值背景色
+			for(let i = 0;i<num;i++){
+				this.index = i;
+				domArr[this.index].style.backgroundColor = colorArr[this.index];
+			}
+		}
+		
+		//将元素组合的背景颜色全部变成某个颜色
+		function bgcol(domarr,bg){//dom数组，背景颜色
+			for(let i = 0;i<domarr.length;i++){
+				domarr[i].style.backgroundColor = bg;
+			}
+		}
+		
+		//获取n个不相同的随机颜色
+		function radomcol(num){
+			let colorarr = [];
+			for(let i = 0;i<num;i++){
+				colorarr.push(identicalcol(colorarr));
+			}
+			return colorarr;
+		}
+		
+		//获取从dom数组中随机n个不相同的随机dom
+		function radomdom(num,domarr){
+			let sletedom = [];
+			for(let i = 0;i<num;i++){
+				sletedom.push(identicaldom(sletedom,domarr));
+			}
+			return sletedom;
+		}
+		
+		//判断从dom组合随机选择的dom是否和选择的数组重合，是就重新选择dom
+		function identicaldom(seletdom,domarr){//已经选择的dom数组,从哪里取值的dom数组
+			let index = parseInt(Math.random()*domarr.length);
+			
+			if(!arrcc(seletdom,domarr[index])) return domarr[index];
+			return identicaldom(seletdom,domarr);
+		}
+		
+		//判断颜色是否和数组的颜色重合，是就重新生成颜色
+		function identicalcol(colarr){
+			let col = colorRandom();
+			
+			if(!arrcc(colarr,col)) return col;
+			return identicalcol(colarr);
+		}
+		
+		//判断某个元素是否存在与数组中
+		function arrcc(arr,list){
+			 for(let i = 0;i<arr.length;i++){
+			 	if(arr[i] == list) return true;
+			 }
+			return false;
+		}
+		
+		
+		//获取随机颜色
+		function colorRandom() {
+            colorStr = "#"+("00000"+((Math.random()*16777215+0.5)>>0).toString(16)).slice(-6);
+            return colorStr;
+   		};
+        
+        //将按钮都变成未选择样式
+		function btn_no(){
+			for(let i = 0;i<btn.length;i++){
+				removeclass(btn[i],'bg-orange');
+				removeclass(btn[i],'col-FFF');
+			}
+		}
+        
+        //给dom添加class
+		function addclass(dom,className){
+			dom.classList.add(className);
+		}
+		
+		//删除dom的class
+		function removeclass(dom,className){
+			dom.classList.remove(className);
+		}
+	</script>
+</html>
