@@ -85,6 +85,7 @@
 		var ti;
 		//开始闪烁，建立定时器自动变颜色
 		function timer(){
+			clearInterval(ti);
 			 ti= window.setInterval(function(){
 					Twinkle(3,list);
 			},1000);
