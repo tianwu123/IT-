@@ -83,17 +83,18 @@
 		}
 		
 		var ti;
+		var isTwinkle = true;
 		//开始闪烁，建立定时器自动变颜色
-		function timer(){
-			clearInterval(ti);
-			 ti= window.setInterval(function(){
+		if(isTwinkle){
+			isTwinkle = false;
+			ti= window.setInterval(function(){
 					Twinkle(3,list);
 			},1000);
-			console.log(ti);
 		}
 		
 		//结束闪烁清除定时器,并将九宫格变成橘黄色
 		function stoptimer(){
+			isTwinkle = true;
 			clearInterval(ti);
 			bgcol(list,'orange');
 		}
