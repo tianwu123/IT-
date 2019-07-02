@@ -85,11 +85,13 @@
 		var ti;
 		var isTwinkle = true;
 		//开始闪烁，建立定时器自动变颜色
-		if(isTwinkle){
-			isTwinkle = false;
-			ti= window.setInterval(function(){
+		function timer(){
+			if(isTwinkle){
+				isTwinkle = false;
+				ti= window.setInterval(function(){
 					Twinkle(3,list);
-			},1000);
+				},1000);
+			}
 		}
 		
 		//结束闪烁清除定时器,并将九宫格变成橘黄色
